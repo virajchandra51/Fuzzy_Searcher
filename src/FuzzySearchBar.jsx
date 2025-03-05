@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import colleges from "./colleges"; // Import dataset
+import { collegesData } from "./collegesData"; // Import dataset
 
 // College fuzzy search scoring weights
 const COLLEGE_SCORE_WORD_MATCH = 20;
@@ -21,11 +21,10 @@ const calculateMatchScore = (query, item) => {
 		let bestMatchScore = 0;
 
 		itemWords.forEach((itemWord) => {
-			let matchIndex = itemWord.indexOf(queryWord);
+			let matchIndex = itemWords.indexOf(queryWord);
 			let isFullWordMatch = itemWord === queryWord; // Check for exact word match
 			let isWordBreakStart = matchIndex === 0; // Check if match is at the start of a word
 			let isWordBreakEnd = matchIndex + queryWord.length === itemWord.length; // Match at end
-
 			let score = 0;
 			if (isFullWordMatch) {
 				score += COLLEGE_SCORE_WORD_MATCH; // Highest priority for exact match
@@ -53,14 +52,15 @@ const calculateMatchScore = (query, item) => {
 const fuzzySearch = (query, dataset) => {
 	if (!query.trim()) return [];
 
-	return dataset
+	const results = dataset
 		.map((item) => ({
 			name: item,
 			score: calculateMatchScore(query, item),
 		}))
 		.filter((result) => result.score > 10) // Remove non-matching items
 		.sort((a, b) => b.score - a.score) // Sort by best score
-		.map((result) => result.name).slice(0, COLLEGE_LIST_TRIM_LENGTH); // Return only names
+		.slice(0, COLLEGE_LIST_TRIM_LENGTH); // Return only names
+	return results;
 };
 
 const FuzzySearchBar = () => {
@@ -70,7 +70,7 @@ const FuzzySearchBar = () => {
 	const handleSearch = (e) => {
 		const input = e.target.value;
 		setQuery(input);
-		setResults(fuzzySearch(input, colleges));
+		setResults(fuzzySearch(input, collegesData));
 	};
 
 	return (
@@ -79,7 +79,7 @@ const FuzzySearchBar = () => {
 				type="text"
 				value={query}
 				onChange={handleSearch}
-				placeholder="Search colleges..."
+				placeholder="Search collegesData..."
 				style={{
 					width: "100%",
 					padding: "8px",
@@ -91,7 +91,7 @@ const FuzzySearchBar = () => {
 				{results.length > 0
 					? results.map((college, index) => (
 							<li key={index} style={{ padding: "5px 0" }}>
-								{college}
+								{college.name} {college.score}
 							</li>
 					  ))
 					: query && <li>No results found</li>}
