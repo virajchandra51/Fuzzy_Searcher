@@ -7,7 +7,7 @@ const COLLEGE_SCORE_WORD_BREAK_START = 10;
 const COLLEGE_SCORE_WORD_BREAK_END = 5;
 const COLLEGE_SCORE_ITEM_TITLE_MATCH = 10;
 const COLLEGE_SCORE_WORD_PREFIX = 20;
-const COLLEGE_LIST_TRIM_LENGTH = 10;
+const COLLEGE_LIST_TRIM_LENGTH = 20;
 
 // Function to calculate match score allowing word reordering
 const calculateMatchScore = (query, item) => {
