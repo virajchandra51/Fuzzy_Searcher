@@ -6,6 +6,7 @@ const COLLEGE_SCORE_WORD_MATCH = 20;
 const COLLEGE_SCORE_WORD_BREAK_START = 10;
 const COLLEGE_SCORE_WORD_BREAK_END = 5;
 const COLLEGE_SCORE_ITEM_TITLE_MATCH = 10;
+const COLLEGE_SCORE_WORD_PREFIX = 20;
 const COLLEGE_LIST_TRIM_LENGTH = 10;
 
 // Function to calculate match score allowing word reordering
@@ -25,6 +26,7 @@ const calculateMatchScore = (query, item) => {
 			let isFullWordMatch = itemWord === queryWord; // Check for exact word match
 			let isWordBreakStart = matchIndex === 0; // Check if match is at the start of a word
 			let isWordBreakEnd = matchIndex + queryWord.length === itemWord.length; // Match at end
+			let isWordPrefix = itemWord.startsWith(queryWord); // Check for word prefix
 			let score = 0;
 			if (isFullWordMatch) {
 				score += COLLEGE_SCORE_WORD_MATCH; // Highest priority for exact match
@@ -34,6 +36,9 @@ const calculateMatchScore = (query, item) => {
 			}
 			if (isWordBreakEnd) {
 				score += COLLEGE_SCORE_WORD_BREAK_END;
+			}
+			if (isWordPrefix) {
+				score += COLLEGE_SCORE_WORD_PREFIX;
 			}
 			if (matchIndex !== -1) {
 				score += COLLEGE_SCORE_ITEM_TITLE_MATCH;
